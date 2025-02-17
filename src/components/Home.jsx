@@ -8,7 +8,7 @@ export default function Home(){
     useEffect(()=>{
         async function fetchExpenses(){
             try{
-                const querySnapshot = await getDocs(collection(db, "expenses"));
+                const querySnapshot = await getDocs(collection(db, "incomes"));
                 const expenses = querySnapshot.docs.map(expense => ({
                     id:expense.id,
                     ...expense.data()

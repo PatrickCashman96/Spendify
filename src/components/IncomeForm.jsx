@@ -65,7 +65,6 @@ export default function IncomeForm({onIncomeAdded}){
                 <option value="stock">Stock</option>
                 <option value="other">Other</option>
             </select>
-
             <button type="submit">Add Income</button>
         </form>
     )
