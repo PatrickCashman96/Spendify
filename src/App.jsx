@@ -1,5 +1,6 @@
 import { Route, Routes } from 'react-router-dom'
 import { useState } from 'react'
+import { db, app } from './firebase'
 
 import './App.css'
 
