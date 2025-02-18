@@ -7,8 +7,9 @@ import {getFirestore} from "firebase/firestore"
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+// Changed API Key to Google Cloud API key, put restrictions on GCP to only allow pings on the website
 const firebaseConfig = {
-  apiKey: "AIzaSyB8c83FiUxCiN8DzySGrbv6eCivQGOFnk4",
+  apiKey: "AIzaSyCcygIcHc4DIzWJJSpQ-vh43Jn4qq8kNJA",
   authDomain: "spenderr-348a8.firebaseapp.com",
   projectId: "spenderr-348a8",
   storageBucket: "spenderr-348a8.firebasestorage.app",
@@ -19,6 +20,6 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+const auth = getAuth(app);
 
-export {db, app}
+export { auth }
