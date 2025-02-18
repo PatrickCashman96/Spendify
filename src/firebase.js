@@ -1,26 +1,33 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import {getAuth} from "firebase/auth"
 import { getFirestore } from "firebase/firestore";
 
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-// Changed API Key to Google Cloud API key, put restrictions on GCP to only allow pings on the website
-const firebaseConfig = {
-  apiKey: "AIzaSyCcygIcHc4DIzWJJSpQ-vh43Jn4qq8kNJA",
-  authDomain: "spenderr-348a8.firebaseapp.com",
-  projectId: "spenderr-348a8",
-  storageBucket: "spenderr-348a8.firebasestorage.app",
-  messagingSenderId: "216154268357",
-  appId: "1:216154268357:web:1a927a97f52b2fd8ec46ac",
-  measurementId: "G-GSB2VNQVHE"
+export const firebaseConfig = {
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
+
+console.log("Firebase Config:", {
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
+});
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+console.log("Firebase initialized:", app);
 
 export const auth = getAuth(app);
 export const db = getFirestore(app);
+
+console.log("Firebase Config:", firebaseConfig);
