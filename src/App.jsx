@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { getAuth, onAuthStateChanged, getIdToken, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import axios from 'axios';
 import ExpenseForm from './components/ExpenseForm';
-import ExpenseList from './components/ExpenseList';
 import './App.css';
 
 const App = () => {
@@ -128,7 +127,6 @@ const App = () => {
           <h1>Expense Tracker</h1>
           <button onClick={handleSignOut}>Sign Out</button>
           <ExpenseForm onExpenseAdded={handleExpenseAdded} />
-          <ExpenseList expenses={expenses} />
         </div>
       )}
     </div>
