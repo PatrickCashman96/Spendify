@@ -9,7 +9,7 @@ export default function Home(){
     useEffect(()=>{
         const fetchIncomes = async () => {
             try{
-                const response = await fetch("/.nelify/functions/firestore");
+                const response = await fetch("/.netlify/functions/getIncome");
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }

@@ -1,6 +1,7 @@
 const admin = require('firebase-admin');
-const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
 
+
+const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 });
@@ -9,6 +10,7 @@ const db = admin.firestore();
 
 exports.handler = async (event) => {
   try {
+    // Verify Auth
     const authHeader = event.headers.authorization;
     if (!authHeader) {
       return { statusCode: 401, body: JSON.stringify({ error: 'Unauthorized' }) };
@@ -18,6 +20,7 @@ exports.handler = async (event) => {
     const decodedToken = await admin.auth().verifyIdToken(token);
     const userId = decodedToken.uid;
 
+    // Interact with Firestore via UserID
     const incomeData = JSON.parse(event.body);
     incomeData.userId = userId;
     const newIncome = await db.collection('incomes').add(incomeData);
