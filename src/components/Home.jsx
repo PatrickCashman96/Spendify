@@ -1,35 +1,40 @@
-import { db } from "../firebase"
 import { useEffect, useState } from "react"
-import { collection, getDocs } from "firebase/firestore"
+
 
 export default function Home(){
-    const[expenses, setExpenses] = useState([]);
+    
+    const [incomes, setIncomes] = useState([]);
 
+    
     useEffect(()=>{
-        async function fetchExpenses(){
+        const fetchIncomes = async () => {
             try{
-                const querySnapshot = await getDocs(collection(db, "incomes"));
-                const expenses = querySnapshot.docs.map(expense => ({
-                    id:expense.id,
-                    ...expense.data()
-                }));
-                setExpenses(expenses);
-            } catch (error) {
-                console.error("Error fetch expense: ", error)
-            }
+                const response = await fetch("/.nelify/functions/firestore");
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                setIncomes(data);
+            } catch (error){
+                console.error("error fetch incomes: ", error);
+            }            
         } 
-        fetchExpenses();
+        fetchIncomes();
     }, [])
 
     return(
         <div className="home">
             
             <h1>Home</h1>
-            <ul>
-                {expenses.map(el=>{
-                    {console.log(el)}
-                })}
-            </ul>
+            
+            {incomes.map(el=>(
+                <div key={index}>
+                    {console.log(el)} 
+                    <p>{el.id}: {JSON.stringify(el)}</p>
+                </div>
+            ))}
+            
             
             
         </div>

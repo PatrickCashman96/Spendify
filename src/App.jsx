@@ -1,6 +1,5 @@
 import { Route, Routes } from 'react-router-dom'
 import { useState } from 'react'
-import { db, app } from './firebase'
 
 import './App.css'
 
@@ -21,8 +20,8 @@ function App() {
 
       <Routes>
         <Route path='/' element={<Home />}/>
-        <Route path="/incomeForm" element={<IncomeForm />} />
-        <Route path="/expenseSummary" element={<Summary />}/>
+        {/* <Route path="/incomeForm" element={<IncomeForm />} />
+        <Route path="/expenseSummary" element={<Summary />}/> */}
 
         <Route path='*' element={<ErrorPage/>}/>
       </Routes>
