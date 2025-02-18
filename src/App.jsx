@@ -1,8 +1,10 @@
+import "./firebase";
 import React, { useState, useEffect } from 'react';
 import { getAuth, onAuthStateChanged, getIdToken, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import axios from 'axios';
 import ExpenseForm from './components/ExpenseForm';
 import './App.css';
+
 
 const App = () => {
   const [user, setUser] = useState(null);

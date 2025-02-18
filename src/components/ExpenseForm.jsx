@@ -1,4 +1,6 @@
-import React from "react";
+import { useState } from 'react';
+import { getAuth, getIdToken } from "firebase/auth";
+import axios from 'axios';
 
 const ExpenseForm = ({ onExpenseAdded }) => {
     const [expenseData, setExpenseData] = useState({
@@ -15,17 +17,21 @@ const handleChange = (e) => {
 
 const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
-        // TODO: figure out datapoints, for now just fill with pseudos
-        const response = await fetch ("api/createExpense",{
-        method: 'POST',
+      const auth = getAuth();
+      const user = auth.currentUser;
+
+      if (!user) {
+        throw new Error("User is not signed in.");
+      }
+      const token = await getIdToken(user);
+
+      const response = await axios.post("./netlify/functions/createExpense", expenseData, {
         headers: {
-            "Content-Type": "app/json",
-            // TODO: Inclure Auth Headers JWT ? 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
         },
-        body: JSON.stringify(expenseData),
-    });
+      });
 
     if (!response.ok) {
         const errorData = await response.json();
@@ -41,6 +47,7 @@ const handleSubmit = async (e) => {
         description:"",
     });
     alert("Expense has been added.");
+
 } catch (error) {
     console.error('Error adding expense:', error);
     alert(error.message); 
@@ -76,7 +83,7 @@ return (
 
     <button type="submit">Add Expense</button>
   </form>
-);
+  );
 };
 
 export default ExpenseForm;
