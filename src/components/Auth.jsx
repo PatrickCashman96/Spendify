@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { auth } from "../firebase";
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
 
-const Auth = () => {
+const Auth = ({setLogged}) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -11,6 +11,7 @@ const Auth = () => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
         console.log("User is signed in:", user);
+        setLogged(auth.currentUser)
       } else {
         console.log("No user is signed in.");
       }
@@ -24,6 +25,7 @@ const Auth = () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       alert("Logged in successfully!");
+      setLogged(auth.currentUser)
     } catch (error) {
       alert(error.message);
     }
