@@ -26,31 +26,25 @@ const handleSubmit = async (e) => {
       }
       const token = await getIdToken(user);
 
-      const response = await axios.post("./netlify/functions/createExpense", expenseData, {
+      const response = await axios.post("/.netlify/functions/createExpense", expenseData, {
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`,
         },
       });
 
-    if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to add expense");
-    }
+    const newExpense = response.data;
 
-    const newExpense = await response.json();
-    onExpenseAdded(newExpense);
     setExpenseData({
         amount:"",
         category:"",
         date:"",
         description:"",
     });
-    alert("Expense has been added.");
+    console.log("Expense has been added.");
 
 } catch (error) {
     console.error('Error adding expense:', error);
-    alert(error.message); 
   }
 };
 
