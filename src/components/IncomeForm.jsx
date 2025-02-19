@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { db } from "../firebase";
-import { collection, addDoc } from "firebase/firestore";
+import { getAuth, getIdToken } from "firebase/auth";
+import axios from "axios";
 
 
-export default function IncomeForm({onIncomeAdded}){
+export default function IncomeForm(){
     const [incomeData, setIncomeData] = useState({
         amount: "",
         date:"",
@@ -20,28 +20,32 @@ export default function IncomeForm({onIncomeAdded}){
         e.preventDefault();
 
         try{
-            const amount = parseFloat(incomeData.amount)
-            const income = await addDoc(collection(db, "incomes"),{
-                amount: amount,
-                date: incomeData.date,
-                description: incomeData.description,
-                source: incomeData.source,
-                userId: "placeholder"
-            })
-            console.log("income added with id: ", income.id);
-
+            const auth = getAuth();
+            const user = auth.currentUser;
+            
+            if(!user){
+                throw new Error("User not signed in. (incomeform)");
+            }
+            const token = await getIdToken(user);
+            
+            const response = await axios.post("/.netlify/functions/createIncome",incomeData,{
+                headers:{
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`,
+                },
+            });
+            
+            const newIncome = response.data;
+            
             setIncomeData({
                 amount: "",
                 date: "",
                 description: "",
                 source: "",
             });
-
-            if (onIncomeAdded){
-                onIncomeAdded();
-            }
+            console.log("Income has been added.")
         }catch(error){
-            console.error("Error add income: ", error)
+            console.error("Error adding income: ", error)
         }
     }
 
