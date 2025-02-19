@@ -1,11 +1,13 @@
+import ExpenseForm from "./ExpenseForm";
 import React, { useState, useEffect } from "react";
 import { db, auth } from "../firebase";
 import { collection, addDoc, query, where, onSnapshot, deleteDoc, doc } from "firebase/firestore";
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
+const COLORS = ["#8884d8", "#82ca9d", "#ffc658", "#ff8042", "#ff6384", "#36a2eb"];
 
 const ExpenseTracker = () => {
   const [expenses, setExpenses] = useState([]);
-  const [description, setDescription] = useState("");
-  const [amount, setAmount] = useState("");
+
 
   useEffect(() => {
     if (auth.currentUser) {
@@ -17,47 +19,47 @@ const ExpenseTracker = () => {
     }
   }, []);
 
-  const addExpense = async () => {
-    if (!description || !amount) return;
-    await addDoc(collection(db, "expenses"), {
-      description,
-      amount: parseFloat(amount),
-      userId: auth.currentUser.uid,
-      createdAt: new Date(),
-    });
-    setDescription("");
-    setAmount("");
-  };
-
   const deleteExpense = async (id) => {
     await deleteDoc(doc(db, "expenses", id));
   };
 
+  const groupedExpenses = expenses.reduce((acc,expense)=>{
+    acc[expense.category] = (acc[expense.category]||0) + Number(expense.amount);
+    return acc;
+  },{});
+  
+  console.log("GE",groupedExpenses)
+  const pieData = Object.keys(groupedExpenses).map((category, index)=>({
+    name: category,
+    value: groupedExpenses[category],
+  }))
+  
+
   return (
     <div>
       <h2>Expense Tracker</h2>
-      <input
-        type="text"
-        placeholder="Description"
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-      />
-      <input
-        type="number"
-        placeholder="Amount"
-        value={amount}
-        onChange={(e) => setAmount(e.target.value)}
-      />
-      <button onClick={addExpense}>Add Expense</button>
+      <ExpenseForm/>
 
       <ul>
         {expenses.map((expense) => (
           <li key={expense.id}>
-            {expense.description} - ${expense.amount}
+            {expense.category} - ${expense.amount} - {expense.description} 
             <button onClick={() => deleteExpense(expense.id)}>Delete</button>
           </li>
         ))}
       </ul>
+      
+      <h3> Expense by Category</h3>
+      <ResponsiveContainer width="100%" height={300} style={{ backgroundColor: "white" }}>
+        <PieChart>
+          <Pie data={pieData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={100} label>
+            {pieData.map((entry,index)=> (
+              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]}/>
+            ))}
+          </Pie>
+          <Tooltip/>
+        </PieChart>
+      </ResponsiveContainer>
     </div>
   );
 };
