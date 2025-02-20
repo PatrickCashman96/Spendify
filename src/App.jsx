@@ -5,7 +5,6 @@ import Sidebar from "./components/Sidebar";
 import Navbar from "./components/Navbar"
 import ExpenseForm from "./components/ExpenseForm";
 import IncomeForm from "./components/IncomeForm";
-import TestChart from "./components/testChart";
 import Home from "./components/Home";
 
 import { auth } from "./firebase";
