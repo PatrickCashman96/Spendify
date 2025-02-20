@@ -69,7 +69,7 @@ const ExpenseTracker = () => {
     <div>
       <h2>Expense Tracker</h2>
       <h3> Expense by Category</h3>
-      <ResponsiveContainer width="100%" height={300} style={{ backgroundColor: "white" }}>
+      <ResponsiveContainer width="100%" height={300}>
         <PieChart>
           <Pie 
             data={pieData} 
@@ -97,7 +97,7 @@ const ExpenseTracker = () => {
           <h3>{selectedCategory}</h3>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={barData}>
-            <CartesianGrid strokeDasharray="3 3" />
+              <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="name" />
               <YAxis />
               <Tooltip formatter={(value, name, props) => [`$${value}`, `${props.payload.description}`]}/>
