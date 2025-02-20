@@ -138,7 +138,7 @@ export default function IncomeTracker({incomes, setIncomes}){
       <ul>
           {incomes.map((income) => (
             <li key={income.id}>
-              {income.source} - ${income.amount} - {income.description} - {income.date}
+              {income.source} - €{income.amount} - {income.description} - {income.date}
               <button onClick={() => removeIncome(income.id)}>Delete</button>
               <button onClick={() => startEditingIncome(income)}>Edit</button>
 
