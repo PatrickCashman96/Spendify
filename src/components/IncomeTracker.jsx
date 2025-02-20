@@ -1,7 +1,7 @@
 import IncomeForm from "./IncomeForm";
 import React, { useState, useEffect } from "react";
 import { db, auth } from "../firebase";
-import { collection, addDoc, query, where, onSnapshot, deleteDoc, doc } from "firebase/firestore";
+import { collection, addDoc, query, where, onSnapshot, deleteDoc, doc, updateDoc } from "firebase/firestore";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid } from "recharts";
 
 const COLORS = ["#8884d8", "#82ca9d", "#ffc658", "#ff8042", "#ff6384", "#36a2eb"];
@@ -10,6 +10,7 @@ export default function IncomeTracker({incomes, setIncomes}){
 
   const [sourceColorMap, setSourceColorMap] = useState({});
   const [selectedSource, setSelectedSource] = useState(null);
+  const [editingIncome, setEditingIncome] = useState(null);
   // get income
   useEffect(()=>{
     if (auth.currentUser){
@@ -35,7 +36,25 @@ export default function IncomeTracker({incomes, setIncomes}){
   // remove an income
   const removeIncome = async(id) =>{
     await deleteDoc(doc(db, "incomes", id));
+    setEditingIncome(null);
   };
+
+  const startEditingIncome = (income) => {
+    setEditingIncome(income);
+  }
+
+  const updateIncome = async (updatedIncome) => {
+    if (editingIncome) {
+      try {
+          await updateDoc(doc(db, "incomes", editingIncome.id), updatedIncome);
+          setEditingIncome(null); // Clear editing state after update
+          alert("Income updated successfully!");
+      } catch (error) {
+          console.error("Error updating income:", error);
+          alert("Error updating income. Please try again.");
+      }
+  }
+};
 
   // group incomes by source
   const groupedIncomes = incomes.reduce((acc, income)=>{
@@ -115,12 +134,21 @@ export default function IncomeTracker({incomes, setIncomes}){
         </div>
       )}
 
-      <IncomeForm/>
+      <IncomeForm onIncomeAdded={income => setIncomes([...incomes, income])}/>
       <ul>
           {incomes.map((income) => (
             <li key={income.id}>
               {income.source} - ${income.amount} - {income.description} - {income.date}
               <button onClick={() => removeIncome(income.id)}>Delete</button>
+              <button onClick={() => startEditingIncome(income)}>Edit</button>
+
+              {editingIncome && editingIncome.id === income.id && (
+                <IncomeForm
+                  income={editingIncome}
+                  onIncomeAdded={updateIncome}
+                  setEditingIncome={setEditingIncome}
+                />
+              )}
             </li>
           ))}
         </ul>

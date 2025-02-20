@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { getAuth, getIdToken } from "firebase/auth";
 import axios from "axios";
 
 
-export default function IncomeForm(){
+export default function IncomeForm({ income, onIncomeAdded, setEditingIncome }) {
     const [incomeData, setIncomeData] = useState({
         amount: "",
         date:"",
@@ -11,6 +11,19 @@ export default function IncomeForm(){
         source:"",
         userId:"",
     });
+
+    useEffect(() => {
+        if (income) {
+            setIncomeData(income);
+        } else {
+            setIncomeData({
+                amount: "",
+                date: "",
+                description: "",
+                source: "",
+            });
+        }
+    }, [income])
 
     const handleChange = (e) =>{
         setIncomeData({...incomeData, [e.target.name]: e.target.value})
@@ -36,6 +49,7 @@ export default function IncomeForm(){
             });
             
             const newIncome = response.data;
+            onIncomeAdded(newIncome);
             
             setIncomeData({
                 amount: "",
@@ -59,7 +73,7 @@ export default function IncomeForm(){
             <input type="date" name="date" value={incomeData.date} onChange={handleChange} required/>
 
             <label htmlFor="description">Description:</label>
-            <textarea name="description" value={incomeData.description} onChange={handleChange} required/>
+            <textarea name="description" value={incomeData.description} onChange={handleChange}/>
 
             <label htmlFor="source">Source:</label>
             <select name="source" value={incomeData.source} onChange={handleChange } required>
@@ -69,7 +83,7 @@ export default function IncomeForm(){
                 <option value="stock">Stock</option>
                 <option value="other">Other</option>
             </select>
-            <button type="submit">Add Income</button>
+            <button type="submit">{income ? "Update Income" : "Add Income"}</button>
         </form>
     )
 }
