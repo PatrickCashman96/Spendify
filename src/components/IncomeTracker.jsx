@@ -60,7 +60,7 @@ export default function IncomeTracker(){
 
   // prepare barchart
   const barData = sortedIncomes.map(income =>({
-    name: income.date,
+    date: income.date,
     description: income.description,
     value: Number(income.amount)
   }))
@@ -98,9 +98,17 @@ export default function IncomeTracker(){
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={barData}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
+              <XAxis dataKey="date" />
               <YAxis />
-              <Tooltip formatter={(value, name, props) => [`$${value}`, `${props.payload.description}`]}/>
+              <Tooltip 
+              formatter={(value, name, props) => [
+                <div>
+                  <p>{props.payload.date}</p>
+                  <p>{props.payload.description}</p>
+                  <p>{`$${value}`}</p>
+                </div>
+                ]}
+              />
               <Bar dataKey="value" fill={sourceColorMap[selectedSource]} />
             </BarChart>
           </ResponsiveContainer>
