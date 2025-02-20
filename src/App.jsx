@@ -1,5 +1,6 @@
 import Auth from "./components/Auth";
 import ExpenseTracker from "./components/ExpenseTracker";
+import IncomeTracker from "./components/IncomeTracker";
 import Sidebar from "./components/Sidebar";
 import Navbar from "./components/Navbar"
 import ExpenseForm from "./components/ExpenseForm";
@@ -38,7 +39,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home/>}></Route>
             <Route path="/expenseTrack" element={auth.currentUser !== null ? <ExpenseTracker /> : <Auth setLogged={setLogged}/>}/>
-            <Route path="/incomeTrack" element={<IncomeForm/>}></Route>
+            <Route path="/incomeTrack" element={auth.currentUser !== null ? <IncomeTracker /> : <Auth setLogged={setLogged}/>}/>
           </Routes>
         </div>
       </div>
