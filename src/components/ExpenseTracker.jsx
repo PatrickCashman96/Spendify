@@ -130,7 +130,7 @@ const ExpenseTracker = ({expenses, setExpenses}) => {
       <ul>
         {expenses.map((expense) => (
           <li key={expense.id}>
-            {expense.category} - €{expense.amount} - {expense.description} 
+            {expense.category} - &euro;{expense.amount} - {expense.description} 
             <button onClick={() => deleteExpense(expense.id)}>Delete</button>
             <button onClick={() => startEditingExpense(expense)}>Edit</button>
 
