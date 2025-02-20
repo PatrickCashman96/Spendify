@@ -10,6 +10,7 @@ const ExpenseTracker = ({expenses, setExpenses}) => {
   
   const [selectedCategory, setSelectedCategory] = useState(null)
   const [categoryColorMap, setCategoryColorMap] = useState({})
+  const [editingExpense, setEditingExpense] = useState(null);
 
   // get expense
   useEffect(() => {
@@ -35,6 +36,24 @@ const ExpenseTracker = ({expenses, setExpenses}) => {
   // remove an expense 
   const deleteExpense = async (id) => {
     await deleteDoc(doc(db, "expenses", id));
+    setEditingExpense(null);
+  };
+
+  const startEditingExpense = (expense) => {
+    setEditingExpense(expense);
+  };
+
+  const updateExpense = async (updatedExpense) => {
+    if (editingExpense) {
+      try {
+        await updateDoc(doc(db, "expenses", editingExpense.id), updatedExpense);
+        setEditingExpense(null);
+        alert("Expense updated successfully!");
+      } catch {
+        console.error("Error updating expense::", error);
+        alert("Error updating expense. Please try again.");
+      }
+    }
   };
   
   // group data by category
@@ -107,13 +126,21 @@ const ExpenseTracker = ({expenses, setExpenses}) => {
         </div>
       )}
 
-      <ExpenseForm/>
-
+      <ExpenseForm onExpenseAdded={expense => setExpenses([...expenses, expense])}/>
       <ul>
         {expenses.map((expense) => (
           <li key={expense.id}>
-            {expense.category} - ${expense.amount} - {expense.description} 
+            {expense.category} - €{expense.amount} - {expense.description} 
             <button onClick={() => deleteExpense(expense.id)}>Delete</button>
+            <button onClick={() => startEditingExpense(expense)}>Edit</button>
+
+            {editingExpense && editingExpense.id === expense.id && (
+              <ExpenseForm
+                expense={editingExpense}
+                onExpenseAdded={updateExpense}
+                setEditingExpense={setEditingExpense}
+              />
+            )}
           </li>
         ))}
       </ul>

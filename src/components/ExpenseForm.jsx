@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { getAuth, getIdToken } from "firebase/auth";
 import axios from "axios";
 
-const ExpenseForm = () => {
+export default function ExpenseForm ({expense, onExpenseAdded, setEditingExpense}) {
   const [expenseData, setExpenseData] = useState({
       amount: "",
       category:"",
@@ -11,9 +11,22 @@ const ExpenseForm = () => {
       userId:"",
   });
 
+  useEffect(() => {
+    if (expense) {
+      setExpenseData(expense);
+    } else {
+      setExpenseData({
+        amount: "",
+        date: "",
+        description: "",
+        category: "",
+      });
+  }
+}, [expense])
+
   const handleChange = (e) => {
-      setExpenseData({ ...expenseData, [e.target.name]: e.target.value});
-  };
+    setExpenseData({ ...expenseData, [e.target.name]: e.target.value});
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -36,6 +49,7 @@ const ExpenseForm = () => {
       });
       
       const newExpense = response.data;
+      onExpenseAdded(newExpense);
       
       setExpenseData({
           amount:"",
@@ -67,6 +81,7 @@ const ExpenseForm = () => {
         <option value="food">Food</option>
         <option value="transportation">Transportation</option>
         <option value="housing">Housing</option>
+        <option value="entertainment"></option>
         {/* Add more categories */}
       </select>
 
@@ -76,9 +91,9 @@ const ExpenseForm = () => {
       <label htmlFor="description">Description:</label>
       <textarea id="description" name="description" value={expenseData.description} onChange={handleChange} />
 
-      <button type="submit">Add Expense</button>
+      <button type="submit">{expense ? "Update Expense" : "Add Expense"}</button>
+      {expense && <button type="button" onClick={() => setEditingExpense(null)}>Cancel</button>}
     </form>
-  );
-};
+  )
+}
 
-export default ExpenseForm;
