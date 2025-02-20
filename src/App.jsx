@@ -4,28 +4,44 @@ import Sidebar from "./components/Sidebar";
 import Navbar from "./components/Navbar"
 import ExpenseForm from "./components/ExpenseForm";
 import IncomeForm from "./components/IncomeForm";
+import TestChart from "./components/testChart";
+import Home from "./components/Home";
+
 import { auth } from "./firebase";
 import { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import React, { useEffect } from "react";
-import TestChart from "./components/testChart";
+
+import "./App.css"
+
 function App() {
   const [logged, setLogged] = useState(null);
+  const [isSidebarOpen, setIsSidebarOpen] =useState(false);
+
+  const toggleSidebar = () =>{
+    setIsSidebarOpen(!isSidebarOpen);
+    console.log("toggelsidebar called")
+  }
+
   useEffect(()=>{
     const unsubscribe = auth.onAuthStateChanged((user)=>{
       setLogged(user)
     })
   })
   return (
-    <div id="body">
-      {/* <TestChart/> */}
-      {/* <Navbar/> */}
-      <Sidebar/>
-      <h1>HOME</h1>
-      {auth.currentUser !== null ? <ExpenseTracker /> : <Auth setLogged={setLogged}/>}
-      {console.log("auth.currentUser: ", auth.currentUser)}
+    <div id="app-container" className={`${isSidebarOpen ? "sidebar-open" : ""}`}>
+      <Sidebar isOpen={isSidebarOpen}/>
       
-      <IncomeForm/>
+      <div id="main-section">
+        <Navbar toggleSidebar={toggleSidebar}/>
+        <div id="main-content">
+          <Routes>
+            <Route path="/" element={<Home/>}></Route>
+            <Route path="/expenseTrack" element={auth.currentUser !== null ? <ExpenseTracker /> : <Auth setLogged={setLogged}/>}/>
+            <Route path="/incomeTrack" element={<IncomeForm/>}></Route>
+          </Routes>
+        </div>
+      </div>
     </div>
   );
 }
