@@ -81,7 +81,7 @@ export default function ExpenseForm ({expense, onExpenseAdded, setEditingExpense
         <option value="food">Food</option>
         <option value="transportation">Transportation</option>
         <option value="housing">Housing</option>
-        <option value="entertainment"></option>
+        <option value="entertainment">Entertainment</option>
         {/* Add more categories */}
       </select>
 
