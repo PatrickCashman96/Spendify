@@ -16,7 +16,7 @@ const ExpenseTracker = () => {
     if (auth.currentUser) {
       const q = query(collection(db, "expenses"), where("userId", "==", auth.currentUser.uid));
       const unsubscribe = onSnapshot(q, (snapshot) => {
-        // get the expense of teh logged in user
+        // get the expense of the logged in user
         const fetchedExpenses = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
         setExpenses(fetchedExpenses);
 
@@ -36,7 +36,7 @@ const ExpenseTracker = () => {
   const deleteExpense = async (id) => {
     await deleteDoc(doc(db, "expenses", id));
   };
-
+  
   // group data by category
   const groupedExpenses = expenses.reduce((acc,expense)=>{
     acc[expense.category] = (acc[expense.category]||0) + Number(expense.amount);
