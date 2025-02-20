@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { getAuth, getIdToken } from "firebase/auth";
 import axios from "axios";
 
-const ExpenseForm = ({ onExpenseAdded }) => {
+const ExpenseForm = () => {
   const [expenseData, setExpenseData] = useState({
       amount: "",
       category:"",

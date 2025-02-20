@@ -17,16 +17,21 @@ import "./App.css"
 function App() {
   const [logged, setLogged] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] =useState(false);
+  const [expenses, setExpenses] = useState([]);
+  const [incomes, setIncomes] = useState([])
 
   const toggleSidebar = () =>{
     setIsSidebarOpen(!isSidebarOpen);
     console.log("toggelsidebar called")
   }
 
+
+
   useEffect(()=>{
     const unsubscribe = auth.onAuthStateChanged((user)=>{
       setLogged(user)
     })
+
   })
   return (
     <div id="app-container" className={`${isSidebarOpen ? "sidebar-open" : ""}`}>
@@ -36,9 +41,9 @@ function App() {
         <Navbar toggleSidebar={toggleSidebar}/>
         <div id="main-content">
           <Routes>
-            <Route path="/" element={<Home/>}></Route>
-            <Route path="/expenseTrack" element={auth.currentUser !== null ? <ExpenseTracker /> : <Auth setLogged={setLogged}/>}/>
-            <Route path="/incomeTrack" element={auth.currentUser !== null ? <IncomeTracker /> : <Auth setLogged={setLogged}/>}/>
+            <Route path="/" element={<Home expenses={expenses} incomes={incomes}/>}></Route>
+            <Route path="/expenseTrack" element={auth.currentUser !== null ? <ExpenseTracker expenses={expenses} setExpenses={setExpenses}/> : <Auth setLogged={setLogged}/>}/>
+            <Route path="/incomeTrack" element={auth.currentUser !== null ? <IncomeTracker incomes={incomes} setIncomes={setIncomes}/> : <Auth setLogged={setLogged}/>}/>
           </Routes>
         </div>
       </div>

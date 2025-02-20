@@ -6,8 +6,8 @@ import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, BarChart, Bar, XAxis
 
 const COLORS = ["#8884d8", "#82ca9d", "#ffc658", "#ff8042", "#ff6384", "#36a2eb"];
 
-export default function IncomeTracker(){
-  const [incomes, setIncomes] = useState([]);
+export default function IncomeTracker({incomes, setIncomes}){
+
   const [sourceColorMap, setSourceColorMap] = useState({});
   const [selectedSource, setSelectedSource] = useState(null);
   // get income

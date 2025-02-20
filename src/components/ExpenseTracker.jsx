@@ -6,8 +6,8 @@ import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, BarChart, Bar, XAxis
 
 const COLORS = ["#8884d8", "#82ca9d", "#ffc658", "#ff8042", "#ff6384", "#36a2eb"];
 
-const ExpenseTracker = () => {
-  const [expenses, setExpenses] = useState([]);
+const ExpenseTracker = ({expenses, setExpenses}) => {
+  
   const [selectedCategory, setSelectedCategory] = useState(null)
   const [categoryColorMap, setCategoryColorMap] = useState({})
 
