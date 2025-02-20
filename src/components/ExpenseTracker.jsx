@@ -9,18 +9,29 @@ const COLORS = ["#8884d8", "#82ca9d", "#ffc658", "#ff8042", "#ff6384", "#36a2eb"
 const ExpenseTracker = () => {
   const [expenses, setExpenses] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null)
+  const [categoryColorMap, setCategoryColorMap] = useState({})
 
   // get expense
   useEffect(() => {
     if (auth.currentUser) {
       const q = query(collection(db, "expenses"), where("userId", "==", auth.currentUser.uid));
       const unsubscribe = onSnapshot(q, (snapshot) => {
-        setExpenses(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+        // get the expense of teh logged in user
+        const fetchedExpenses = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
+        setExpenses(fetchedExpenses);
+
+        // get the color of the category
+        const uniqueCategory = [...new Set(fetchedExpenses.map(expense=>expense.category))];
+        const categoryColors = uniqueCategory.reduce((acc, category, index)=>{
+          acc[category] = COLORS[index % COLORS.length];
+          return acc;
+        },{});
+        setCategoryColorMap(categoryColors);
       });
       return () => unsubscribe();
     }
   }, []);
-
+  
   // remove an expense 
   const deleteExpense = async (id) => {
     await deleteDoc(doc(db, "expenses", id));
@@ -47,7 +58,7 @@ const ExpenseTracker = () => {
   const sortedExpenses = [...filteredExpenses].sort((a,b)=> new Date(a.date)- new Date(b.date))
 
   // get barchart data
-  const barData = filteredExpenses.map(expense => ({
+  const barData = sortedExpenses.map(expense => ({
     name: expense.date,
     description: expense.description,
     value: Number(expense.amount),
@@ -74,7 +85,7 @@ const ExpenseTracker = () => {
             }}
           >
             {pieData.map((entry,index)=> (
-              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]}/>
+              <Cell key={`cell-${index}`} fill={categoryColorMap[entry.name]}/>
             ))}
           </Pie>
           <Tooltip/>
@@ -90,12 +101,12 @@ const ExpenseTracker = () => {
               <XAxis dataKey="name" />
               <YAxis />
               <Tooltip formatter={(value, name, props) => [`$${value}`, `${props.payload.description}`]}/>
-              <Bar dataKey="value" fill="#8884d8" />
+              <Bar dataKey="value" fill={categoryColorMap[selectedCategory]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
       )}
-      
+
       <ExpenseForm/>
 
       <ul>
