@@ -134,7 +134,7 @@ export default function IncomeTracker({incomes, setIncomes}){
         </div>
       )}
 
-      <IncomeForm onIncomeAdded={income => setIncomes([...incomes, income])}/>
+      <IncomeForm />
       <ul>
           {incomes.map((income) => (
             <li key={income.id}>
@@ -154,5 +154,5 @@ export default function IncomeTracker({incomes, setIncomes}){
         </ul>
     </div>
     
-  )
+  );
 }
