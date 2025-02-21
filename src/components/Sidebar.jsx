@@ -3,19 +3,19 @@ import "./Sidebar.css"
 export default function Sidebar(props){
     return(
         <div id="sidebar" className={`${props.isOpen ? "open": ""}`}>
-            <Link to="/">
+            <Link to="/" onClick={props.toggleSidebar}>
                 <h2>Home</h2>
             </Link>
 
-            <Link to="/expenseTrack">
+            <Link to="/expenseTrack" onClick={props.toggleSidebar}>
                 <h2>Expense</h2>
             </Link>
 
-            <Link to="/incomeTrack">
+            <Link to="/incomeTrack" onClick={props.toggleSidebar}>
                 <h2>Income</h2>
             </Link>
 
-            <Link to="/user">
+            <Link to="/user" onClick={props.toggleSidebar}>
                 <h2>Logins</h2>
             </Link>
         </div>
