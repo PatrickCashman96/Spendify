@@ -14,7 +14,7 @@ export default function Home({incomes, expenses, setExpenses, setIncomes}){
         <div className="home">
             
             {/* <h1>Hello {auth.currentUser.email}</h1> */}
-            <h2>You currently have ${currentSaving} in your saving</h2>
+            <h2>You currently have €{currentSaving} in your saving</h2>
             <section>
                 <h2>Expenses</h2>
                 <ExpenseChart expenses={expenses} setExpenses={setExpenses}/>
