@@ -18,7 +18,6 @@ const ExpenseTracker = ({expenses, setExpenses}) => {
       return () => unsubscribe();
   }
   }, []);
-
   // remove an expense 
   const deleteExpense = async (id) => {
     await deleteDoc(doc(db, "expenses", id));
@@ -53,18 +52,9 @@ const ExpenseTracker = ({expenses, setExpenses}) => {
       <h2>Expense Tracker</h2>
 
       <ExpenseChart expenses={expenses} setExpenses={setExpenses}/>
-      <ExpenseForm
-                expense={editingExpense}
-                onExpenseAdded={(newExpense) => {
-                    console.log("Expense received from form:", newExpense);
-                    console.log("Current expenses state:", expenses);
-                    const updatedExpenses = [...expenses]; // Create a copy
-                    updatedExpenses.push(newExpense);       // Add the new expense
-                    setExpenses(updatedExpenses);           // Set the state with the new array
-                    console.log("Expenses state after update:", updatedExpenses);
-                }}
-                setEditingExpense={setEditingExpense}
-            />
+      <ExpenseForm onExpenseAdded={(newExpense) => {
+                setExpenses([...expenses, newExpense]); // Create a new array!
+            }} />
 
       <ul>
         {expenses.map((expense) => (

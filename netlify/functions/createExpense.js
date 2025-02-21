@@ -24,9 +24,12 @@ exports.handler = async (event) => {
     // Interact with Firestore via UserID
     const expenseData = JSON.parse(event.body);
     expenseData.userId = userId;
-    const newExpense = await db.collection('expenses').add(expenseData);
 
-    return { statusCode: 201, body: JSON.stringify({ id: newExpense.id }) };
+    const newExpenseRef = await db.collection('expenses').add(expenseData); // Get the DocumentReference
+    const newExpenseDoc = await newExpenseRef.get(); // Get the DocumentSnapshot
+    const newExpense = { id: newExpenseDoc.id, ...newExpenseDoc.data() }; // Combine
+
+    return { statusCode: 201, body: JSON.stringify(newExpense) };
   } catch (error) {
     console.error('Error creating expense:', error);
     return { statusCode: 500, body: JSON.stringify({ error: 'Failed to create expense' }) };
