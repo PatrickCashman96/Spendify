@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { getAuth, getIdToken } from "firebase/auth";
 import axios from "axios";
 
+
 export default function IncomeForm({ income, onIncomeAdded, setEditingIncome }) {
     const [incomeData, setIncomeData] = useState({
         amount: "",
@@ -28,7 +29,7 @@ export default function IncomeForm({ income, onIncomeAdded, setEditingIncome }) 
         setIncomeData({...incomeData, [e.target.name]: e.target.value})
     }
 
-    const handleSubmit = async (e)=>{
+    const handleSubmit = async (e)=> {
         e.preventDefault();
 
         try{
@@ -39,27 +40,48 @@ export default function IncomeForm({ income, onIncomeAdded, setEditingIncome }) 
                 throw new Error("User not signed in. (incomeform)");
             }
             const token = await getIdToken(user);
-            
-            // add income to firestore
-            const response = await axios.post("/.netlify/functions/createIncome",incomeData,{
-                headers:{
+
+            const incomeDataWithUserId = {
+                ...incomeData,
+                userId: user.uid
+            };
+
+            let response;
+            if (income) {
+                response = await axios.post("/.netlify/functions/updateIncome", { id: income.id, ...incomeDataWithUserId }, {
+                headers : {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`,
                 },
             });
+                } else {
+                    response = await axios.post("/.netlify/functions/createIncome", incomeDataWithUserId, {
+                        headers : {
+                            "Content-Type": "application/json",
+                            "Authorization": `Bearer ${token}`,
+                        },
+                    });
+                }
             
-            const newIncome = response.data;
+            const newIncome =  response?.data;
+
+            if (newIncome) {
             onIncomeAdded(newIncome);
-            
+            }
+
             setIncomeData({
                 amount: "",
                 date: "",
                 description: "",
                 source: "",
             });
-            console.log("Income has been added.")
-        }catch(error){
-            console.error("Error adding income: ", error)
+            
+            if (income) {
+                setEditingIncome(null);
+            }
+            console.log("Income has been added/updated.")
+        } catch (error) {
+            console.error("Error adding/updating income: ", error)
         }
     }
 
@@ -84,7 +106,6 @@ export default function IncomeForm({ income, onIncomeAdded, setEditingIncome }) 
                 <option value="other">Other</option>
             </select>
             <button type="submit">{income ? "Update Income" : "Add Income"}</button>
-            {income && <button type="button" onClick={()=>{setEditingIncome(null)}}>Cancel</button>}
         </form>
     )
 }
