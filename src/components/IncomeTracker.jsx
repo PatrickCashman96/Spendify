@@ -2,7 +2,7 @@ import IncomeForm from "./IncomeForm";
 import React, { useState, useEffect } from "react";
 import { db, auth } from "../firebase";
 import { collection, addDoc, query, where, onSnapshot, deleteDoc, doc, updateDoc } from "firebase/firestore";
-
+import "./ExpenseTracker.css"
 import IncomeChart from "./IncomeChart";
 
 

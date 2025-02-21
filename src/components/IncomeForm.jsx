@@ -109,6 +109,7 @@ export default function IncomeForm({ income, onIncomeAdded, setEditingIncome }) 
                 <option value="other">Other</option>
             </select>
             <button type="submit">{income ? "Update Income" : "Add Income"}</button>
+            {income && <button type="button" onClick={()=>setEditingIncome(null)}>Cancel</button>}
         </form>
     )
 }
