@@ -41,7 +41,7 @@ function App() {
         <Navbar toggleSidebar={toggleSidebar}/>
         <div id="main-content">
           <Routes>
-            <Route path="/" element={<Home expenses={expenses} incomes={incomes}/>}></Route>
+            <Route path="/" element={<Home expenses={expenses} incomes={incomes} setIncomes={setIncomes} setExpenses={setExpenses} />}></Route>
             <Route path="/expenseTrack" element={auth.currentUser !== null ? <ExpenseTracker expenses={expenses} setExpenses={setExpenses}/> : <Auth setLogged={setLogged}/>}/>
             <Route path="/incomeTrack" element={auth.currentUser !== null ? <IncomeTracker incomes={incomes} setIncomes={setIncomes}/> : <Auth setLogged={setLogged}/>}/>
           </Routes>

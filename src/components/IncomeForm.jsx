@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { getAuth, getIdToken } from "firebase/auth";
 import axios from "axios";
 
-
 export default function IncomeForm({ income, onIncomeAdded, setEditingIncome }) {
     const [incomeData, setIncomeData] = useState({
         amount: "",
@@ -41,6 +40,7 @@ export default function IncomeForm({ income, onIncomeAdded, setEditingIncome }) 
             }
             const token = await getIdToken(user);
             
+            // add income to firestore
             const response = await axios.post("/.netlify/functions/createIncome",incomeData,{
                 headers:{
                     "Content-Type": "application/json",
@@ -84,6 +84,7 @@ export default function IncomeForm({ income, onIncomeAdded, setEditingIncome }) 
                 <option value="other">Other</option>
             </select>
             <button type="submit">{income ? "Update Income" : "Add Income"}</button>
+            {income && <button type="button" onClick={()=>{setEditingIncome(null)}}>Cancel</button>}
         </form>
     )
 }
