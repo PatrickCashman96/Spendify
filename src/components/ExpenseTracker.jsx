@@ -135,6 +135,7 @@ const ExpenseTracker = ({expenses, setExpenses}) => {
             <button onClick={() => deleteExpense(expense.id)}>Delete</button>
             <button onClick={() => startEditingExpense(expense)}>Edit</button>
 
+
             {editingExpense && editingExpense.id === expense.id && (
               <ExpenseForm
                 expense={editingExpense}

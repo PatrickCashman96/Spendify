@@ -77,7 +77,6 @@ export default function ExpenseForm ({expense, onExpenseAdded, setEditingExpense
       if (expense) {
         setEditingExpense(null);
       }
-
       console.log("Expense has been added/updated.");
     } catch (error) {
       console.error('Error adding/updating expense:', error);
