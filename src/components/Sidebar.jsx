@@ -3,7 +3,6 @@ import "./Sidebar.css"
 export default function Sidebar(props){
     return(
         <div id="sidebar" className={`${props.isOpen ? "open": ""}`}>
-            <h1>Sidebar</h1>
             <Link to="/">
                 <h2>Home</h2>
             </Link>
@@ -14,6 +13,10 @@ export default function Sidebar(props){
 
             <Link to="/incomeTrack">
                 <h2>Income</h2>
+            </Link>
+
+            <Link to="/user">
+                <h2>Logins</h2>
             </Link>
         </div>
     )

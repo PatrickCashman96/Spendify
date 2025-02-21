@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { auth } from "../firebase";
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "firebase/auth";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Auth = ({setLogged}) => {
   const [email, setEmail] = useState("");
@@ -24,41 +26,63 @@ const Auth = ({setLogged}) => {
   const handleLogin = async () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      alert("Logged in successfully!");
+      toast.success("Logged in successfully!");
       setLogged(auth.currentUser)
     } catch (error) {
-      alert(error.message);
+      toast.error(error.message);
     }
   };
 
   const handleSignup = async () => {
     try {
       await createUserWithEmailAndPassword(auth, email, password);
-      alert("Signed up successfully!");
+      toast.success("Signed up successfully!");
     } catch (error) {
-      alert(error.message);
+      toast.error(error.message);
     }
   };
 
-  return (
-    <div>
-      <h2>Login / Signup</h2>
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <button onClick={handleLogin}>Login</button>
-      <button onClick={handleSignup}>Signup</button>
-    </div>
-  );
+  const handleLogout = async () =>{
+    try{
+      await signOut(auth);
+      toast.success("Sign out successfully!")
+    }catch (error){
+      toast.error(error.message);
+    }
+  }
+
+  if(!auth.currentUser){
+    return (
+      <div>
+        
+        <h2>Login / Signup</h2>
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <button onClick={handleLogin}>Login</button>
+        <button onClick={handleSignup}>Signup</button>
+        <ToastContainer position="top-right" autoClose={3000} />
+      </div>
+    );
+  }else{
+    return(
+      <div>
+        <ToastContainer position="top-right" autoClose={3000} />
+        <button onClick={handleLogout}>Logout</button>
+      </div>
+    )
+    
+  }
+  
 };
 
 export default Auth;
