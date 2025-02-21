@@ -1,35 +1,40 @@
-import { useEffect, useState } from "react"
-import { auth } from "../firebase";
 import { Link } from "react-router-dom";
 import ExpenseChart from "./ExpenseChart";
 import IncomeChart from "./IncomeChart";
+import "./Home.css"
+
 export default function Home({incomes, expenses, setExpenses, setIncomes}){
-    console.log(incomes)
+    // console.log(incomes)
     const totalIncome = incomes.reduce((acc, income)=> acc+Number(income.amount), 0);
-    console.log("totalIncome: ", totalIncome)
+    // console.log("totalIncome: ", totalIncome)
     const totalExpense = expenses.reduce((acc, expense)=> acc+Number(expense.amount),0);
-    console.log("totalExpense: ", totalExpense)
-    const currentSaving = totalIncome-totalExpense;
+    // console.log("totalExpense: ", totalExpense)
+    const currentSaving = Math.abs(totalIncome-totalExpense);
+
     return(
         <div className="home">
             
             {/* <h1>Hello {auth.currentUser.email}</h1> */}
-            <h2>You currently have ${currentSaving} in your saving</h2>
-            <section>
-                <h2>Expenses</h2>
-                <ExpenseChart expenses={expenses} setExpenses={setExpenses}/>
-            </section>
-            
-            <section>
-                <h2>Incomes</h2>
-                <IncomeChart incomes={incomes} setIncomes={setIncomes}/>
-            </section>
+            <h2>
+                {totalIncome > totalExpense
+                    ? `You have €${currentSaving} in your saving`
+                    : `You are in €${Math.abs(currentSaving)} debt`}
+            </h2>
             
 
-            <h3>Go to <Link to="/incomeTrack">Income</Link> or <Link to="/expenseTrack">Expense</Link> for further detail</h3>
+            <sect id="home">
 
-            
-            
+                <section className="chart-container">
+                    <Link to="/expenseTrack"><h2>Expenses</h2></Link>
+                    <ExpenseChart expenses={expenses} setExpenses={setExpenses}/>
+                </section>
+                
+                <section className="chart-container">
+                    <Link to="/incomeTrack"><h2>Income</h2></Link>
+                    <IncomeChart incomes={incomes} setIncomes={setIncomes}/>
+                </section>
+            </sect>
+
         </div>
     )
 }

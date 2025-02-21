@@ -34,13 +34,14 @@ function App() {
     return () => unsubscribe();
   },[]);
 
+
   return (
     
     <div id="app-container" className={`${isSidebarOpen ? "sidebar-open" : ""}`}>
-      <Sidebar isOpen={isSidebarOpen}/>
-      
+      <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar}/>
+      <Navbar toggleSidebar={toggleSidebar}/>
       <div id="main-section">
-        <Navbar toggleSidebar={toggleSidebar}/>
+
         <div id="main-content">
           <Routes>
             <Route path="/" element={auth.currentUser? <Home expenses={expenses} incomes={incomes} setIncomes={setIncomes} setExpenses={setExpenses} /> : <Auth setLogged={setLogged}/>}></Route>
@@ -50,7 +51,7 @@ function App() {
           </Routes>
         </div>
 
-        <h1>Footer</h1>
+        {/* <h1>Footer</h1> */}
       </div>
       
     </div>
