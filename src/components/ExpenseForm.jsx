@@ -40,26 +40,47 @@ export default function ExpenseForm ({expense, onExpenseAdded, setEditingExpense
       }
       const token = await getIdToken(user);
 
-      // add expense to firestore
-      const response = await axios.post("/.netlify/functions/createExpense",expenseData,{
-        headers:{
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,
-        },
-      });
+      const expenseDataWithUserId = {
+        ...expenseData,
+        userId: user.uid,
+    };
+
+    let response;
+    if (expense) { // Update
+        response = await axios.post("/.netlify/functions/updateExpense", { id: expense.id, ...expenseDataWithUserId }, {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`,
+            },
+        });
+    } else { // Create
+        response = await axios.post("/.netlify/functions/createExpense", expenseDataWithUserId, {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`,
+            },
+        });
+    }
       
-      const newExpense = response.data;
+      const newExpense = response?.data;
+      if (newExpense) {
       onExpenseAdded(newExpense);
-      
+    }
+
       setExpenseData({
           amount:"",
           category:"",
           date:"",
           description:"",
       });
-      console.log("Expense has been added.");
+
+      if (expense) {
+        setEditingExpense(null);
+      }
+
+      console.log("Expense has been added/updated.");
     } catch (error) {
-      console.error('Error adding expense:', error);
+      console.error('Error adding/updating expense:', error);
     }
   };
 
