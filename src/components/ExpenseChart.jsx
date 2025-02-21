@@ -63,7 +63,7 @@ const ExpenseChart = ({expenses, setExpenses}) =>{
   return(
     <div>
       <h3>Expense Overview</h3>
-      <ResponsiveContainer width="50%" height={300}>
+      <ResponsiveContainer width="100%" height={300}>
         <PieChart>
           <Pie 
             data={pieData} 
