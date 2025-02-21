@@ -59,7 +59,7 @@ const IncomeChart = ({incomes, setIncomes})=>{
   }))
 
   return(
-    <div>
+    <div className="charts">
       <ResponsiveContainer width="100%" height={300} >
         <PieChart>
           <Pie
@@ -88,28 +88,28 @@ const IncomeChart = ({incomes, setIncomes})=>{
         </PieChart>
       </ResponsiveContainer>
 
-       {selectedSource && toggleBarChart && (
-          <div>
-            <h3>{selectedSource}</h3>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={barData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="date" />
-                <YAxis />
-                <Tooltip 
-                formatter={(value, name, props) => [
-                  <div>
-                    <p>{props.payload.date}</p>
-                    <p>{props.payload.description}</p>
-                    <p>{`$${value}`}</p>
-                  </div>
-                  ]}
-                />
-                <Bar dataKey="value" fill={sourceColorMap[selectedSource]} />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        )}
+      {selectedSource && toggleBarChart && (
+        <div className={`barchart ${toggleBarChart ? "active" : ""}`}>
+          <h3>{selectedSource}</h3>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={barData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="date" />
+              <YAxis />
+              <Tooltip 
+              formatter={(value, name, props) => [
+                <div>
+                  <p>{props.payload.date}</p>
+                  <p>{props.payload.description}</p>
+                  <p>{`$${value}`}</p>
+                </div>
+                ]}
+              />
+              <Bar dataKey="value" fill={sourceColorMap[selectedSource]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      )}
     </div>
   )
 
