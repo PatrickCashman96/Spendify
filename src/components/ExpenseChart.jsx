@@ -54,15 +54,14 @@ const ExpenseChart = ({expenses, setExpenses}) =>{
 
   // get barchart data
   const barData = sortedExpenses.map(expense => ({
-    name: expense.date,
+    date: expense.date,
     description: expense.description,
     value: Number(expense.amount),
   }));
   console.log("Expense Bar Data:",barData);
 
   return(
-    <div>
-      <h3>Expense Overview</h3>
+    <div className="charts">
       <ResponsiveContainer width="100%" height={300}>
         <PieChart>
           <Pie 
@@ -94,14 +93,21 @@ const ExpenseChart = ({expenses, setExpenses}) =>{
       </ResponsiveContainer>
 
       {selectedCategory && toggleBarChart && (
-        <div>
+        <div className="barchart">
           <h3>{selectedCategory}</h3>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={barData}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="name" />
               <YAxis />
-              <Tooltip formatter={(value, name, props) => [`$${value}`, `${props.payload.description}`]}/>
+              <Tooltip 
+              formatter={(value, name, props) => [
+                <div>
+                  <p>{props.payload.date}</p>
+                  <p>{props.payload.description}</p>
+                  <p>{`$${value}`}</p>
+                </div>
+                ]}/>
               <Bar dataKey="value" fill={categoryColorMap[selectedCategory]} />
             </BarChart>
           </ResponsiveContainer>
