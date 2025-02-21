@@ -34,6 +34,7 @@ export default function IncomeTracker({incomes, setIncomes}){
 
   return (
     <div>
+      <h2>Income Tracker</h2>
       <IncomeChart incomes={incomes} setIncomes={setIncomes} />
       <IncomeForm onIncomeAdded={income => setIncomes([...incomes, income])} />
       <ul>
