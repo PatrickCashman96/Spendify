@@ -157,4 +157,5 @@ export default function IncomeTracker({incomes, setIncomes}){
         </ul>
     </div>
   );
+  
 }
