@@ -77,6 +77,7 @@ const Auth = ({setLogged}) => {
     return(
       <div>
         <ToastContainer position="top-right" autoClose={3000} />
+        <h2>Switch Account / Logout</h2>
         <button onClick={handleLogout}>Logout</button>
       </div>
     )
