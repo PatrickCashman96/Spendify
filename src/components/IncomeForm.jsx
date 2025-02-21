@@ -64,6 +64,9 @@ export default function IncomeForm({ income, onIncomeAdded, setEditingIncome }) 
             }
 
             const newIncome = response?.data;
+            if (newIncome) {
+                onIncomeAdded(newIncome);
+            }
 
             if (newIncome) {
                 onIncomeAdded(newIncome);

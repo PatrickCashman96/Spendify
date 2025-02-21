@@ -24,12 +24,13 @@ exports.handler = async (event) => {
 
     // Interact with Firestore via UserID
     const incomeData = JSON.parse(event.body);
-
-
     incomeData.userId = userId;
-    const newIncome = await db.collection('incomes').add(incomeData);
 
-    return { statusCode: 201, body: JSON.stringify({ id: newIncome.id }) };
+    const newIncomeRef = await db.collection('incomes').add(incomeData); // Get DocumentReference
+    const newIncomeDoc = await newIncomeRef.get(); // Get DocumentSnapshot
+    const newIncome = { id: newIncomeDoc.id, ...newIncomeDoc.data() }; // Combine id and data
+
+    return { statusCode: 201, body: JSON.stringify(newIncome) };
   } catch (error) {
     return { statusCode: 500, body: JSON.stringify({ error: error.message, stack: error.stack }) };
   }

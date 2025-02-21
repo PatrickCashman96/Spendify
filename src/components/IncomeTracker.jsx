@@ -36,7 +36,12 @@ export default function IncomeTracker({incomes, setIncomes}){
     <div>
       <h2>Income Tracker</h2>
       <IncomeChart incomes={incomes} setIncomes={setIncomes} />
-      <IncomeForm onIncomeAdded={income => setIncomes([...incomes, income])} />
+      <IncomeForm onIncomeAdded={(newIncome) => {
+                const updatedIncomes = [...incomes];
+                updatedIncomes.push(newIncome);
+                setIncomes(updatedIncomes);
+            }} />
+        
       <ul>
         {incomes.map((income) => (
           <li key={income.id}>
