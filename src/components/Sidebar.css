@@ -1,4 +1,4 @@
-#sidebar{
+#sidebar {
     position: fixed;
     top: 0;
     left: 0;
@@ -8,32 +8,35 @@
     overflow-x: hidden;
     padding-top: 1rem;
 
-    display:flex;
+    display: flex;
     flex-direction: column;
     justify-content: center;
     transition: width 0.3s ease-in-out;
-} 
+}
 
-#sidebar.open{
-    width:20%;
+#sidebar.open {
+    width: 20%;
     transition: width 0.3s ease-in-out;
 }
 
 #sidebar li {
-list-style: none;
-left: 0;
+    list-style: none;
+    left: 0;
 }
 
-#sidebar h2, button{
+#sidebar h2,
+button {
     color: black;
 }
 
-#main-content{
+#main-content {
     padding-top: 11vh;
 }
+
 @media screen and (max-width: 768px) {
     #sidebar.open {
-        width: 100%; /* Full width on mobile */
+        width: 100%;
+        /* Full width on mobile */
         z-index: 1000;
         text-align: center;
     }

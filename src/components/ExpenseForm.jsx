@@ -2,13 +2,13 @@ import { useState, useEffect } from 'react';
 import { getAuth, getIdToken } from "firebase/auth";
 import axios from "axios";
 
-export default function ExpenseForm ({expense, onExpenseAdded, setEditingExpense}) {
+export default function ExpenseForm({ expense, onExpenseAdded, setEditingExpense }) {
   const [expenseData, setExpenseData] = useState({
-      amount: "",
-      category:"",
-      date:"",
-      description:"",
-      userId:"",
+    amount: "",
+    category: "",
+    date: "",
+    description: "",
+    userId: "",
   });
 
   useEffect(() => {
@@ -21,11 +21,11 @@ export default function ExpenseForm ({expense, onExpenseAdded, setEditingExpense
         description: "",
         category: "",
       });
-  }
-}, [expense])
+    }
+  }, [expense])
 
   const handleChange = (e) => {
-    setExpenseData({ ...expenseData, [e.target.name]: e.target.value});
+    setExpenseData({ ...expenseData, [e.target.name]: e.target.value });
   }
 
   const handleSubmit = async (e) => {
@@ -43,35 +43,35 @@ export default function ExpenseForm ({expense, onExpenseAdded, setEditingExpense
       const expenseDataWithUserId = {
         ...expenseData,
         userId: user.uid,
-    };
+      };
 
-    let response;
-    if (expense) { // Update
+      let response;
+      if (expense) { // Update
         response = await axios.post("/.netlify/functions/updateExpense", { id: expense.id, ...expenseDataWithUserId }, {
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`,
-            },
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+          },
         });
-    } else { // Create
+      } else { // Create
         response = await axios.post("/.netlify/functions/createExpense", expenseDataWithUserId, {
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`,
-            },
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+          },
         });
-    }
-      
+      }
+
       const newExpense = response?.data;
       if (newExpense) {
-      onExpenseAdded(newExpense);
-    }
+        onExpenseAdded(newExpense);
+      }
 
       setExpenseData({
-          amount:"",
-          category:"",
-          date:"",
-          description:"",
+        amount: "",
+        category: "",
+        date: "",
+        description: "",
       });
 
       if (expense) {

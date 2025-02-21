@@ -6,10 +6,10 @@ import axios from "axios";
 export default function IncomeForm({ income, onIncomeAdded, setEditingIncome }) {
     const [incomeData, setIncomeData] = useState({
         amount: "",
-        date:"",
-        description:"",
-        source:"",
-        userId:"",
+        date: "",
+        description: "",
+        source: "",
+        userId: "",
     });
 
     useEffect(() => {
@@ -25,18 +25,18 @@ export default function IncomeForm({ income, onIncomeAdded, setEditingIncome }) 
         }
     }, [income])
 
-    const handleChange = (e) =>{
-        setIncomeData({...incomeData, [e.target.name]: e.target.value})
+    const handleChange = (e) => {
+        setIncomeData({ ...incomeData, [e.target.name]: e.target.value })
     }
 
-    const handleSubmit = async (e)=> {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
-        try{
+        try {
             const auth = getAuth();
             const user = auth.currentUser;
-            
-            if(!user){
+
+            if (!user) {
                 throw new Error("User not signed in. (incomeform)");
             }
             const token = await getIdToken(user);
@@ -49,24 +49,24 @@ export default function IncomeForm({ income, onIncomeAdded, setEditingIncome }) 
             let response;
             if (income) {
                 response = await axios.post("/.netlify/functions/updateIncome", { id: income.id, ...incomeDataWithUserId }, {
-                headers : {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`,
-                },
-            });
-                } else {
-                    response = await axios.post("/.netlify/functions/createIncome", incomeDataWithUserId, {
-                        headers : {
-                            "Content-Type": "application/json",
-                            "Authorization": `Bearer ${token}`,
-                        },
-                    });
-                }
-            
-            const newIncome =  response?.data;
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`,
+                    },
+                });
+            } else {
+                response = await axios.post("/.netlify/functions/createIncome", incomeDataWithUserId, {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`,
+                    },
+                });
+            }
+
+            const newIncome = response?.data;
 
             if (newIncome) {
-            onIncomeAdded(newIncome);
+                onIncomeAdded(newIncome);
             }
 
             setIncomeData({
@@ -75,7 +75,7 @@ export default function IncomeForm({ income, onIncomeAdded, setEditingIncome }) 
                 description: "",
                 source: "",
             });
-            
+
             if (income) {
                 setEditingIncome(null);
             }
@@ -86,19 +86,19 @@ export default function IncomeForm({ income, onIncomeAdded, setEditingIncome }) 
     }
 
 
-    return(
+    return (
         <form onSubmit={handleSubmit} className="form">
             <label htmlFor="amout">Amount:</label>
-            <input type="number" name="amount" value={incomeData.amount} onChange={handleChange} required/>
+            <input type="number" name="amount" value={incomeData.amount} onChange={handleChange} required />
 
             <label htmlFor="date">Date:</label>
-            <input type="date" name="date" value={incomeData.date} onChange={handleChange} required/>
+            <input type="date" name="date" value={incomeData.date} onChange={handleChange} required />
 
             <label htmlFor="description">Description:</label>
-            <textarea name="description" value={incomeData.description} onChange={handleChange}/>
+            <textarea name="description" value={incomeData.description} onChange={handleChange} />
 
             <label htmlFor="source">Source:</label>
-            <select name="source" value={incomeData.source} onChange={handleChange } required>
+            <select name="source" value={incomeData.source} onChange={handleChange} required>
                 <option value="">Select Source</option>
                 <option value="salary">Salary</option>
                 <option value="sideHustle">Side Hustle</option>

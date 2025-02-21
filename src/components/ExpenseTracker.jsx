@@ -21,12 +21,17 @@ const ExpenseTracker = ({expenses, setExpenses}) => {
   const updateExpense = async (updatedExpense) => {
     if (editingExpense) {
       try {
-          await updateDoc(doc(db, "expenses", editingExpense.id), updatedExpense);
-          setEditingExpense(null);
-          alert("Expense updated successfully!");
+        await updateDoc(doc(db, "expenses", editingExpense.id), updatedExpense);
+        setEditingExpense(null);
+        alert("Expense updated successfully!");
+
+        const updatedExpenses = expenses.map(expense => 
+          expense.id === updatedExpense.id ? updatedExpense : expense
+        );
+        setExpenses(updatedExpenses);
       } catch (error) {
-          console.error("Error updating expense:", error);
-          alert("Error updating expense. Please try again.");
+        console.error("Error updating expense:", error);
+        alert("Error updating expense. Please try again.");
       }
     }
   };

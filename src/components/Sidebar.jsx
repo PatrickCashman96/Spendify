@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom"
 import "./Sidebar.css"
-export default function Sidebar(props){
-    return(
-        <div id="sidebar" className={`${props.isOpen ? "open": ""}`}>
+export default function Sidebar(props) {
+    return (
+        <div id="sidebar" className={`${props.isOpen ? "open" : ""}`}>
             <Link to="/" onClick={props.toggleSidebar}>
                 <h2>Home</h2>
             </Link>
@@ -20,7 +20,7 @@ export default function Sidebar(props){
             </Link>
 
             <a href="https://github.com/PatrickCashman96/React-project">
-                <img style={{height: "10vh"}} src="/assets/img/logo/github.png" alt="githublogo" />
+                <img style={{ height: "10vh" }} src="/assets/img/logo/github.png" alt="githublogo" />
             </a>
         </div>
     )
