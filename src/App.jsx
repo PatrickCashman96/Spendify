@@ -16,44 +16,44 @@ import "./App.css"
 
 function App() {
   const [logged, setLogged] = useState(null);
-  const [isSidebarOpen, setIsSidebarOpen] =useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [expenses, setExpenses] = useState([]);
   const [incomes, setIncomes] = useState([])
 
-  const toggleSidebar = () =>{
+  const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
     console.log("toggelsidebar called")
   }
 
 
 
-  useEffect(()=>{
-    const unsubscribe = auth.onAuthStateChanged((user)=>{
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
       setLogged(user)
     });
     return () => unsubscribe();
-  },[]);
+  }, []);
 
 
   return (
-    
+
     <div id="app-container" className={`${isSidebarOpen ? "sidebar-open" : ""}`}>
-      <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar}/>
-      <Navbar toggleSidebar={toggleSidebar}/>
+      <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+      <Navbar toggleSidebar={toggleSidebar} />
       <div id="main-section">
 
         <div id="main-content">
           <Routes>
-            <Route path="/" element={auth.currentUser? <Home expenses={expenses} incomes={incomes} setIncomes={setIncomes} setExpenses={setExpenses} /> : <Auth setLogged={setLogged}/>}></Route>
-            <Route path="/expenseTrack" element={auth.currentUser !== null ? <ExpenseTracker expenses={expenses} setExpenses={setExpenses}/> : <Auth setLogged={setLogged}/>}/>
-            <Route path="/incomeTrack" element={auth.currentUser !== null ? <IncomeTracker incomes={incomes} setIncomes={setIncomes}/> : <Auth setLogged={setLogged}/>}/>
-            <Route path="/user" element={<Auth setLogged={setLogged}/>}/>
+            <Route path="/" element={auth.currentUser ? <Home expenses={expenses} incomes={incomes} setIncomes={setIncomes} setExpenses={setExpenses} /> : <Auth setLogged={setLogged} />}></Route>
+            <Route path="/expenseTrack" element={auth.currentUser !== null ? <ExpenseTracker expenses={expenses} setExpenses={setExpenses} /> : <Auth setLogged={setLogged} />} />
+            <Route path="/incomeTrack" element={auth.currentUser !== null ? <IncomeTracker incomes={incomes} setIncomes={setIncomes} /> : <Auth setLogged={setLogged} />} />
+            <Route path="/user" element={<Auth setLogged={setLogged} />} />
           </Routes>
         </div>
 
         {/* <h1>Footer</h1> */}
       </div>
-      
+
     </div>
   );
 }

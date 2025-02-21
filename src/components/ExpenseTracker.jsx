@@ -6,8 +6,8 @@ import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, BarChart, Bar, XAxis
 
 const COLORS = ["#8884d8", "#82ca9d", "#ffc658", "#ff8042", "#ff6384", "#36a2eb"];
 
-const ExpenseTracker = ({expenses, setExpenses}) => {
-  
+const ExpenseTracker = ({ expenses, setExpenses }) => {
+
   const [selectedCategory, setSelectedCategory] = useState(null)
   const [categoryColorMap, setCategoryColorMap] = useState({})
   const [editingExpense, setEditingExpense] = useState(null);
@@ -22,17 +22,17 @@ const ExpenseTracker = ({expenses, setExpenses}) => {
         setExpenses(fetchedExpenses);
 
         // get the color of the category
-        const uniqueCategory = [...new Set(fetchedExpenses.map(expense=>expense.category))];
-        const categoryColors = uniqueCategory.reduce((acc, category, index)=>{
+        const uniqueCategory = [...new Set(fetchedExpenses.map(expense => expense.category))];
+        const categoryColors = uniqueCategory.reduce((acc, category, index) => {
           acc[category] = COLORS[index % COLORS.length];
           return acc;
-        },{});
+        }, {});
         setCategoryColorMap(categoryColors);
       });
       return () => unsubscribe();
     }
   }, []);
-  
+
   // remove an expense 
   const deleteExpense = async (id) => {
     await deleteDoc(doc(db, "expenses", id));
@@ -46,35 +46,40 @@ const ExpenseTracker = ({expenses, setExpenses}) => {
   const updateExpense = async (updatedExpense) => {
     if (editingExpense) {
       try {
-          await updateDoc(doc(db, "expenses", editingExpense.id), updatedExpense);
-          setEditingExpense(null);
-          alert("Expense updated successfully!");
+        await updateDoc(doc(db, "expenses", editingExpense.id), updatedExpense);
+        setEditingExpense(null);
+        alert("Expense updated successfully!");
+
+        const updatedExpenses = expenses.map(expense => 
+          expense.id === updatedExpense.id ? updatedExpense : expense
+        );
+        setExpenses(updatedExpenses);
       } catch (error) {
-          console.error("Error updating expense:", error);
-          alert("Error updating expense. Please try again.");
+        console.error("Error updating expense:", error);
+        alert("Error updating expense. Please try again.");
       }
-  }
-};
-  
+    }
+  };
+
   // group data by category
-  const groupedExpenses = expenses.reduce((acc,expense)=>{
-    acc[expense.category] = (acc[expense.category]||0) + Number(expense.amount);
+  const groupedExpenses = expenses.reduce((acc, expense) => {
+    acc[expense.category] = (acc[expense.category] || 0) + Number(expense.amount);
     return acc;
-  },{});
-  
+  }, {});
+
   // get piechart data
-  const pieData = Object.keys(groupedExpenses).map((category, index)=>({
+  const pieData = Object.keys(groupedExpenses).map((category, index) => ({
     name: category,
     value: groupedExpenses[category],
-  }));  
+  }));
   console.log("Pie Data: ", pieData);
 
   // expense for selected category
   const filteredExpenses = selectedCategory
-  ? expenses.filter(expense => expense.category === selectedCategory)
-  : [];
+    ? expenses.filter(expense => expense.category === selectedCategory)
+    : [];
 
-  const sortedExpenses = [...filteredExpenses].sort((a,b)=> new Date(a.date)- new Date(b.date))
+  const sortedExpenses = [...filteredExpenses].sort((a, b) => new Date(a.date) - new Date(b.date))
 
   // get barchart data
   const barData = sortedExpenses.map(expense => ({
@@ -82,7 +87,7 @@ const ExpenseTracker = ({expenses, setExpenses}) => {
     description: expense.description,
     value: Number(expense.amount),
   }))
-  console.log("barData:",barData)
+  console.log("barData:", barData)
 
   return (
     <div>
@@ -90,27 +95,27 @@ const ExpenseTracker = ({expenses, setExpenses}) => {
       <h3> Expense by Category</h3>
       <ResponsiveContainer width="100%" height={300}>
         <PieChart>
-          <Pie 
-            data={pieData} 
-            dataKey="value" 
-            nameKey="name" 
-            cx="50%" 
-            cy="50%" 
-            outerRadius={100} 
+          <Pie
+            data={pieData}
+            dataKey="value"
+            nameKey="name"
+            cx="50%"
+            cy="50%"
+            outerRadius={100}
             label
-            onClick={(category,index)=>{
+            onClick={(category, index) => {
               console.log("Clicked Category:", category.name);
               setSelectedCategory(category.name);
             }}
           >
-            {pieData.map((entry,index)=> (
-              <Cell key={`cell-${index}`} fill={categoryColorMap[entry.name]}/>
+            {pieData.map((entry, index) => (
+              <Cell key={`cell-${index}`} fill={categoryColorMap[entry.name]} />
             ))}
           </Pie>
-          <Tooltip/>
+          <Tooltip />
         </PieChart>
       </ResponsiveContainer>
-      
+
       {selectedCategory && (
         <div>
           <h3>{selectedCategory}</h3>
@@ -119,14 +124,14 @@ const ExpenseTracker = ({expenses, setExpenses}) => {
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="name" />
               <YAxis />
-              <Tooltip formatter={(value, name, props) => [`$${value}`, `${props.payload.description}`]}/>
+              <Tooltip formatter={(value, name, props) => [`$${value}`, `${props.payload.description}`]} />
               <Bar dataKey="value" fill={categoryColorMap[selectedCategory]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
       )}
 
-      <ExpenseForm onExpenseAdded={expense => setExpenses ([...expenses, expense])} />
+      <ExpenseForm onExpenseAdded={expense => setExpenses([...expenses, expense])} />
 
       <ul>
         {expenses.map((expense) => (

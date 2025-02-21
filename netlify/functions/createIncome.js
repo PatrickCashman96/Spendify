@@ -31,6 +31,6 @@ exports.handler = async (event) => {
 
     return { statusCode: 201, body: JSON.stringify({ id: newIncome.id }) };
   } catch (error) {
-    return { statusCode: 500, body: JSON.stringify({ error: error.message , stack: error.stack }) };
+    return { statusCode: 500, body: JSON.stringify({ error: error.message, stack: error.stack }) };
   }
 };

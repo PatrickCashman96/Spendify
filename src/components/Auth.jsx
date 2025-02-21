@@ -4,7 +4,7 @@ import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } f
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const Auth = ({setLogged}) => {
+const Auth = ({ setLogged }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -42,19 +42,19 @@ const Auth = ({setLogged}) => {
     }
   };
 
-  const handleLogout = async () =>{
-    try{
+  const handleLogout = async () => {
+    try {
       await signOut(auth);
       toast.success("Sign out successfully!")
-    }catch (error){
+    } catch (error) {
       toast.error(error.message);
     }
   }
 
-  if(!auth.currentUser){
+  if (!auth.currentUser) {
     return (
       <div>
-        
+
         <h2>Login / Signup</h2>
         <input
           type="email"
@@ -73,17 +73,17 @@ const Auth = ({setLogged}) => {
         <ToastContainer position="top-right" autoClose={3000} />
       </div>
     );
-  }else{
-    return(
+  } else {
+    return (
       <div>
         <ToastContainer position="top-right" autoClose={3000} />
         <h2>Switch Account / Logout</h2>
         <button onClick={handleLogout}>Logout</button>
       </div>
     )
-    
+
   }
-  
+
 };
 
 export default Auth;
