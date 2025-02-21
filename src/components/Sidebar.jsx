@@ -18,6 +18,10 @@ export default function Sidebar(props){
             <Link to="/user" onClick={props.toggleSidebar}>
                 <h2>Logins</h2>
             </Link>
+
+            <a href="https://github.com/PatrickCashman96/React-project">
+                <img style={{height: "10vh"}} src="/assets/img/logo/github.png" alt="githublogo" />
+            </a>
         </div>
     )
 }
