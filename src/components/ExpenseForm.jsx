@@ -84,7 +84,7 @@ export default function ExpenseForm({ expense, onExpenseAdded, setEditingExpense
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className='form'>
       <label htmlFor="amount">Amount:</label>
       <input
         type="number"

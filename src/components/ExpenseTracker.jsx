@@ -3,7 +3,7 @@ import ExpenseChart from "./ExpenseChart";
 import React, { useState, useEffect } from "react";
 import { db, auth } from "../firebase";
 import { collection, addDoc, query, where, onSnapshot, deleteDoc, doc } from "firebase/firestore";
-
+import "./ExpenseTracker.css"
 const ExpenseTracker = ({expenses, setExpenses}) => {
   const [editingExpense, setEditingExpense] = useState(null);
 
