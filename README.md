@@ -1,4 +1,4 @@
-# Spendify - Track your incomes and expenses 
+# [Spendify](https://kashmen.netlify.app/) - Track your incomes and expenses 
 
 ##
 
